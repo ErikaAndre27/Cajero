@@ -21,7 +21,7 @@ namespace Cajero
             return usuario.Identificacion.PadRight(20) +
                    usuario.NombreCompleto.PadRight(40) +
                    usuario.Clave.PadRight(10) +
-                   usuario.Saldo;
+                   usuario.Saldo.ToString().PadRight(30);
         }
     }
 }
