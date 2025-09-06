@@ -1,0 +1,1 @@
+FechaHora           IdUsuario                Tipo de movimiento          Monto               Saldo Anterior              Saldo Nuevo
