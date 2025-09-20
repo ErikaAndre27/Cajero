@@ -27,6 +27,9 @@ namespace Cajero
             if (EsValido(IdUsuario, Clave)==true)
             {
                 Console.WriteLine($"Credenciales correctas, bienvenido {UsuarioConectado.NombreCompleto}");
+                System.Threading.Thread.Sleep(2000);
+                Console.Clear();
+                HacerMenu();
             }
 
             else {
@@ -102,13 +105,65 @@ namespace Cajero
             }
             
         }
-        public void IniciarSesion(string id, string clave)
-        {
-
-        }
+       
         public void HacerMenu()
         {
-            Console.WriteLine("");
+            char opcion;
+            char[] opcionesValidas = ['1','2', '3', '4' , '5', '6'];
+            bool existe= false;
+
+            while (!existe)
+            {
+                try
+                {
+                    Console.Write(@"
+            ____________________________________________________________________________________
+            |                                                                                  |
+            |                                         Bienvenid@                               |
+            |                                                                                  |
+            |                     Seleccione la opción del trámite que desea hacer             |
+            |                                                                                  |
+            |                  1. Depósito o consignación                                      |
+            |                  2. Retiro                                                       |
+            |                  3. Consulta de saldo                                            | 
+            |                  4. Consulta úlitmos 5 movimientos                               |
+            |                  5. Cambio de clave                                              |
+            |                  6. Cerrar sesión                                                |
+            |                                                                                  |
+            |                                                                                  |
+            |__________________________________________________________________________________|                                                                                           
+
+                        Ingrese el número ->");
+
+                    opcion = char.Parse(Console.ReadLine());
+
+                    switch (opcion)
+                    {
+                        case '1':
+
+                            Console.WriteLine("Hola");
+                            existe = true;
+                            break;
+                        default:
+                            Console.Clear();
+                            Console.WriteLine("Opción incorrecta");
+                            break;
+
+                    } 
+                }
+                catch (Exception ex)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Opción incorrecta");
+
+                }
+
+            }      
+
+          
+             
+
+
 
         }
     }
