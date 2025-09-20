@@ -13,7 +13,7 @@ namespace Cajero
     {
         public Usuario? UsuarioConectado;
         private const String RUTA_ARCHIVO = "C:\\Users\\eandr\\source\\repos\\Cajero\\Usuarios.txt";
-        public async Task Inicio()
+        public void Inicio()
         {
             //Imprime mensaje inicial y solicita credenciales de ingreso
             Console.WriteLine("Bienvenido al cajero");
@@ -24,7 +24,7 @@ namespace Cajero
             string Clave = Console.ReadLine();
 
             //Acepta acceso si ha ingresado las credenciales correctas
-            if (await EsValido(IdUsuario, Clave)==true)
+            if (EsValido(IdUsuario, Clave)==true)
             {
                 Console.WriteLine($"Credenciales correctas, bienvenido {UsuarioConectado.NombreCompleto}");
             }
@@ -34,13 +34,13 @@ namespace Cajero
             }
         }
 
-        public async Task<bool> EsValido(string IdUsuario, string ClaveUsuario)
+        public bool EsValido(string IdUsuario, string ClaveUsuario)
         {
             using (StreamReader sr = new StreamReader(RUTA_ARCHIVO))
             {   
                 //Lee línea por línea el archivo de usuarios
-                await sr.ReadLineAsync();
-                string Linea = await sr.ReadLineAsync();
+                sr.ReadLine();
+                string Linea = sr.ReadLine();
                                 
                 while (Linea != null)
                 {
@@ -57,7 +57,7 @@ namespace Cajero
                         if (IdUsuario == Id)
                         {
                             string ClaveIngresada = ClaveUsuario;
-                            int Intentos = 3;
+                            int Intentos = 4;
                             
                             while (Intentos !=0)
                             {
@@ -94,7 +94,7 @@ namespace Cajero
                         }
                     
                     }
-                    Linea = await sr.ReadLineAsync();
+                    Linea = sr.ReadLine();
 
                 }
                 Console.WriteLine("El usuario no existe.");
