@@ -141,9 +141,41 @@ namespace Cajero
                     {
                         case '1':
 
-                            Console.WriteLine("Hola");
+                            Deposito();
                             existe = true;
                             break;
+
+                        case '2':
+
+                            Retiro();
+                            existe = true;
+                            break;
+
+                        case '3':
+
+                            ConsultaSaldo();
+                            existe = true;
+                            break;
+
+                        case '4':
+
+                            VerMovimientos();
+                            existe = true;
+                            break;
+
+                        case '5':
+
+                            CambiarClave();
+                            existe = true;
+                            break;
+
+                        case '6':
+
+                            existe = true;
+                            Console.WriteLine("Gracias por usar nuestros servicios, presione cualquier tecla para terminar");
+                            Console.ReadKey();
+                            break;
+
                         default:
                             Console.Clear();
                             Console.WriteLine("Opción incorrecta");
@@ -158,13 +190,43 @@ namespace Cajero
 
                 }
 
-            }      
+            }               
+        }
 
-          
-             
-
-
+        public void Deposito()
+        {
 
         }
+        public void Retiro()
+        {
+
+        }
+
+
+        public void LeerArchivos()
+        {
+
+        }
+
+        public void ActualizarArchivo()
+        {
+
+        }
+
+        public void ConsultaSaldo()
+        {
+
+        }
+
+        public void VerMovimientos()
+        {
+
+        }
+        public void CambiarClave()
+        {
+
+        }
+
+
     }
 }
