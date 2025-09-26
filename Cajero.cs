@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection.PortableExecutable;
 using System.Runtime.CompilerServices;
@@ -13,6 +14,7 @@ namespace Cajero
     {
         public Usuario? UsuarioConectado;
         private const String RUTA_ARCHIVO = "C:\\Users\\eandr\\source\\repos\\Cajero\\Usuarios.txt";
+        public List<Usuario> ListaUsuarios = new List<Usuario>();
         public void Inicio()
         {
             //Imprime mensaje inicial y solicita credenciales de ingreso
@@ -140,8 +142,8 @@ namespace Cajero
                     switch (opcion)
                     {
                         case '1':
-
                             Deposito();
+                            ActualizarUsuarios();
                             existe = true;
                             break;
 
@@ -203,14 +205,77 @@ namespace Cajero
         }
 
 
-        public void LeerArchivos()
+        public void ActualizarUsuarios()
         {
+            try
+            {
+                using (StreamWriter sw = new StreamWriter(RUTA_ARCHIVO, append: false))
+                {
+                    sw.WriteLine("Identificación".PadRight(20) + "Nombre Completo".PadRight(40) + "Clave".PadRight(10) + "Saldo".PadRight(30));
 
+                    for (int i = 0; i < ListaUsuarios.Count; i++)
+                    {
+                        if (ListaUsuarios[i].Identificacion == UsuarioConectado.Identificacion)
+                        {
+                            ListaUsuarios[i] = UsuarioConectado;
+
+                            sw.WriteLine(UsuarioConectado.FormatearUsuario(UsuarioConectado));
+
+                        }
+                        else
+                        {
+                            sw.WriteLine(ListaUsuarios[i].FormatearUsuario(ListaUsuarios[i]));
+                        }
+
+                    }
+
+
+                }
+            }
+            catch (Exception ex)
+                {
+                Console.Clear();
+                Console.WriteLine("Opción incorrecta");
+
+            }
         }
 
-        public void ActualizarArchivo()
+        //Este método lee el archivo de Usuario.txt y guarda los registros en una lista
+        public void UsuariosALista()
         {
+            using (StreamReader sr = new StreamReader(RUTA_ARCHIVO))
+            {
+                try
+                {
+                    string linea;
+                    while ((linea = sr.ReadLine()) != null)
+                    {
 
+                        if (linea.StartsWith("Identificación"))
+                        {
+                            continue;
+                        }
+
+                        Usuario UsuarioTemporal = new Usuario();
+                        UsuarioTemporal.Identificacion = linea.Substring(0, 20).Trim();
+                        UsuarioTemporal.NombreCompleto = linea.Substring(20, 40).Trim();
+                        UsuarioTemporal.Clave = linea.Substring(60, 10).Trim();
+                        UsuarioTemporal.Saldo = decimal.Parse(linea.Substring(70, 30).Trim());
+
+                        ListaUsuarios.Add(UsuarioTemporal);
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Opción incorrecta");
+
+                }
+
+
+            }
+          
         }
 
         public void ConsultaSaldo()

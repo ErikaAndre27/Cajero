@@ -1,4 +1,5 @@
 ﻿using Cajero;
+using System.ComponentModel;
 using System.Linq;
 
 //Ruta del archivo en el que se guarda la información de las cuentas registradas
@@ -34,13 +35,18 @@ try
         //Si el archivo no existe lo crea y agrega la línea de encabezado y usuarios
         using (StreamWriter sw = File.CreateText(RutaArchivo))
         {
-            sw.WriteLine("Identificación".PadRight(20)+"Nombre Completo".PadRight(40)+"Clave".PadRight(10)+"Saldo".PadRight(30));
+            sw.WriteLine("Identificación".PadRight(20) + "Nombre Completo".PadRight(40) + "Clave".PadRight(10) + "Saldo".PadRight(30));
             sw.WriteLine(Usuario1.FormatearUsuario(Usuario1));
             sw.WriteLine(Usuario2.FormatearUsuario(Usuario2));
             sw.WriteLine(Usuario3.FormatearUsuario(Usuario3));
         }
     }
+    else
+    {
+        Cajero1.UsuariosALista();
+    }
 
+ 
     if (!File.Exists(RutaMovimientos))
     {
         using (StreamWriter sw = File.CreateText(RutaMovimientos))
