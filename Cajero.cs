@@ -107,7 +107,9 @@ namespace Cajero
             }
             
         }
-       
+
+
+        //Método para mostrar el menú una vez el Usuario se haya autenticado exitosamente
         public void HacerMenu()
         {
             char opcion;
@@ -204,7 +206,7 @@ namespace Cajero
 
         }
 
-
+        //Este método se implementa para actualizar el archivo al hacer alguna modificación del archivo Usuarios
         public void ActualizarUsuarios()
         {
             try
