@@ -51,7 +51,7 @@ try
     {
         using (StreamWriter sw = File.CreateText(RutaMovimientos))
         {
-            sw.WriteLine("FechaHora".PadRight(20) + "IdUsuario".PadRight(25) + "Tipo de movimiento".PadRight(28) + "Monto".PadRight(20)+ "Saldo Anterior".PadRight(28)+"Saldo Nuevo".PadRight(30));
+            sw.WriteLine("FechaHora".PadRight(30) + "IdUsuario".PadRight(25) + "Tipo de movimiento".PadRight(28) + "Monto".PadRight(20)+ "Saldo Anterior".PadRight(28)+"Saldo Nuevo".PadRight(30));
         }
     }
 

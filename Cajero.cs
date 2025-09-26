@@ -14,9 +14,13 @@ namespace Cajero
     {
         public Usuario? UsuarioConectado;
         private const String RUTA_ARCHIVO = "C:\\Users\\eandr\\source\\repos\\Cajero\\Usuarios.txt";
+        private const string RUTA_MOVIMIENTOS = "C:\\Users\\eandr\\source\\repos\\Cajero\\Movimientos.txt";
+
         public List<Usuario> ListaUsuarios = new List<Usuario>();
         public void Inicio()
         {
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.Clear();
             //Imprime mensaje inicial y solicita credenciales de ingreso
             Console.WriteLine("Bienvenido al cajero");
             Console.Write("Ingrese su número de cuenta: ");
@@ -146,31 +150,26 @@ namespace Cajero
                         case '1':
                             Deposito();
                             ActualizarUsuarios();
-                            existe = true;
                             break;
 
                         case '2':
 
                             Retiro();
-                            existe = true;
                             break;
 
                         case '3':
 
                             ConsultaSaldo();
-                            existe = true;
                             break;
 
                         case '4':
 
                             VerMovimientos();
-                            existe = true;
                             break;
 
                         case '5':
 
                             CambiarClave();
-                            existe = true;
                             break;
 
                         case '6':
@@ -197,9 +196,72 @@ namespace Cajero
             }               
         }
 
-        public void Deposito()
+         public void Deposito()
         {
+            Console.Clear();
+            try
+            {
+                
+                Console.Write(@"
+            ____________________________________________________________________________________
+            |                                                                                  |
+            |                           Depósito o Consignación                                |
+            |                                                                                  |
+            |                         Ingrese el monto a depositar                             |
+            |                                                                                  |
+            |                (Recuerde que el máximo a depositar es 2'000.000)                 |
+            |__________________________________________________________________________________|                                                                                           
 
+                        Ingrese el valor ->");
+
+                decimal deposito = decimal.Parse(Console.ReadLine());
+                string monto = deposito.ToString();
+
+                if (deposito > 0 && deposito < 2000000)
+                {
+                    string TipoMovimiento = "Depósito";
+                    decimal SaldoAnterior = UsuarioConectado.Saldo;
+                    UsuarioConectado.Saldo += deposito;
+
+                    Console.Write($@"
+            ____________________________________________________________________________________
+            |                                                                                  |
+            |                                Depósito Existoso                                 |
+            |                                                                                  |
+            |                       Valor depositado: {deposito.ToString().PadRight(41)}|
+            |                       Saldo actual: {UsuarioConectado.Saldo.ToString().PadRight(45)}|
+            |                                                                                  |
+            |__________________________________________________________________________________|   ");
+
+                    AgregarMovimiento(TipoMovimiento, monto, SaldoAnterior);
+                    ActualizarUsuarios();
+                    Console.ReadKey(true);
+                }
+                else
+                {   //Console.Clear();
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    //Console.Clear();
+                    Console.Write(@"
+            ____________________________________________________________________________________
+            |                                                                                  |
+            |                                     ERROR                                        |
+            |                                                                                  |
+            |                       El valor ingresado está fuera del rango                    |
+            |                                                                                  |
+            |                (Recuerde que el máximo a depositar es 2'000.000)                 |
+            |__________________________________________________________________________________|");
+                    
+                    Console.ReadKey(true);
+                    
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.Clear();
+                Console.WriteLine("Valor inválido");
+
+            }
         }
         public void Retiro()
         {
@@ -285,6 +347,16 @@ namespace Cajero
 
         }
 
+        public void AgregarMovimiento(string TipoMovimiento, string monto, decimal SaldoAnterior)
+        {
+            using (StreamWriter sw = File.AppendText(RUTA_MOVIMIENTOS))
+            {
+                string FechaHora = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss").PadRight(30);
+                string SaldoAnteriorString = SaldoAnterior.ToString();
+                string SaldoNuevoString = UsuarioConectado.Saldo.ToString();
+                sw.WriteLine(FechaHora + UsuarioConectado.Identificacion.PadRight(25) + TipoMovimiento.PadRight(28) + monto.PadRight(20) + SaldoAnteriorString.PadRight(28) + SaldoNuevoString.PadRight(30));
+            }
+        }
         public void VerMovimientos()
         {
 
