@@ -149,7 +149,6 @@ namespace Cajero
                     {
                         case '1':
                             Deposito();
-                            ActualizarUsuarios();
                             break;
 
                         case '2':
@@ -263,9 +262,91 @@ namespace Cajero
 
             }
         }
+
+        //Este método solicita al usuario un valor a retira, debe estar en el rango 10.000 y 7.000.000, y tener disponible ese saldo en la cuenta
         public void Retiro()
         {
+            Console.Clear();
+            try
+            {
 
+                Console.Write(@"
+            ____________________________________________________________________________________
+            |                                                                                  |
+            |                                    Retiro                                        |
+            |                                                                                  |
+            |                         Ingrese el monto a retirar                               |
+            |                                                                                  |
+            |            (Mínimo 10.000 - máximo 7'000.000 por transferencia)                  |
+            |                                                                                  |
+            |__________________________________________________________________________________|                                                                                           
+
+                        Ingrese el valor a retirar->");
+
+                decimal retiro = decimal.Parse(Console.ReadLine());
+                string monto = retiro.ToString();
+
+                if (retiro >= 10000 && retiro <= 7000000 && retiro <= UsuarioConectado.Saldo)
+                {
+                    string TipoMovimiento = "Retiro";
+                    decimal SaldoAnterior = UsuarioConectado.Saldo;
+                    UsuarioConectado.Saldo -= retiro;
+
+                    Console.Write($@"
+            ____________________________________________________________________________________
+            |                                                                                  |
+            |                                Retiro   Existoso                                 |
+            |                                                                                  |
+            |                       Valor retiro: {retiro.ToString().PadRight(45)}|
+            |                       Saldo actual: {UsuarioConectado.Saldo.ToString().PadRight(45)}|
+            |                                                                                  |
+            |__________________________________________________________________________________|   ");
+
+                    AgregarMovimiento(TipoMovimiento, monto, SaldoAnterior);
+                    ActualizarUsuarios();
+                    Console.ReadKey(true);
+                }
+                else
+                {
+                    if (retiro > UsuarioConectado.Saldo)
+                    {
+                        Console.Write(@"
+            ____________________________________________________________________________________
+            |                                                                                  |
+            |                                     ERROR                                        |
+            |                                                                                  |
+            |                             ¡Fondos insuficientes!                               |
+            |                                                                                  |
+            |__________________________________________________________________________________|");
+
+                        Console.ReadKey(true);
+                    }
+                    else
+                    {
+
+                        Console.Write(@"
+            ____________________________________________________________________________________
+            |                                                                                  |
+            |                                     ERROR                                        |
+            |                                                                                  |
+            |                       El valor ingresado está fuera del rango                    |
+            |                                                                                  |
+            |            (Recuerde: Mínimo 10.000 - máximo 7'000.000 por transferencia)        |
+            |__________________________________________________________________________________|");
+
+                        Console.ReadKey(true);
+
+                    }
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.Clear();
+                Console.WriteLine("Valor inválido");
+
+            }
         }
 
         //Este método se implementa para actualizar el archivo al hacer alguna modificación del archivo Usuarios
@@ -356,6 +437,12 @@ namespace Cajero
                 string SaldoNuevoString = UsuarioConectado.Saldo.ToString();
                 sw.WriteLine(FechaHora + UsuarioConectado.Identificacion.PadRight(25) + TipoMovimiento.PadRight(28) + monto.PadRight(20) + SaldoAnteriorString.PadRight(28) + SaldoNuevoString.PadRight(30));
             }
+        }
+
+        public void MovimientosALista()
+        {
+
+
         }
         public void VerMovimientos()
         {
