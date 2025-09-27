@@ -300,11 +300,13 @@ namespace Cajero
             |                       Valor retiro: {retiro.ToString().PadRight(45)}|
             |                       Saldo actual: {UsuarioConectado.Saldo.ToString().PadRight(45)}|
             |                                                                                  |
+            |             *Presione cualquier tecla para volver al menú principal              |
             |__________________________________________________________________________________|   ");
 
                     AgregarMovimiento(TipoMovimiento, monto, SaldoAnterior);
                     ActualizarUsuarios();
                     Console.ReadKey(true);
+                    Console.Clear();
                 }
                 else
                 {
@@ -317,9 +319,11 @@ namespace Cajero
             |                                                                                  |
             |                             ¡Fondos insuficientes!                               |
             |                                                                                  |
+            |             *Presione cualquier tecla para volver al menú principal              |
             |__________________________________________________________________________________|");
 
                         Console.ReadKey(true);
+                        Console.Clear();
                     }
                     else
                     {
@@ -332,9 +336,12 @@ namespace Cajero
             |                       El valor ingresado está fuera del rango                    |
             |                                                                                  |
             |            (Recuerde: Mínimo 10.000 - máximo 7'000.000 por transferencia)        |
+            |                                                                                  |
+            |             *Presione cualquier tecla para volver al menú principal              |
             |__________________________________________________________________________________|");
 
                         Console.ReadKey(true);
+                        Console.Clear();
 
                     }
 
@@ -425,7 +432,30 @@ namespace Cajero
 
         public void ConsultaSaldo()
         {
+            Console.Clear();
+            try
+            {
 
+                Console.Write(@$"
+            ____________________________________________________________________________________
+            |                                                                                  |
+            |                                 Consulta de saldo                                |
+            |                                                                                  |
+            |                         Saldo actual: ${UsuarioConectado.Saldo.ToString().PadRight(42)}|
+            |                                                                                  |
+            |                                                                                  |
+            |             *Presione cualquier tecla para volver al menú principal              |
+            |__________________________________________________________________________________|");
+
+                Console.ReadKey(true);
+                Console.Clear();
+            }
+            catch (Exception ex)
+            {
+                Console.Clear();
+                Console.WriteLine("Valor inválido");
+
+            }
         }
 
         public void AgregarMovimiento(string TipoMovimiento, string monto, decimal SaldoAnterior)
