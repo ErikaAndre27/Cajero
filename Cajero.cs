@@ -17,6 +17,7 @@ namespace Cajero
         private const string RUTA_MOVIMIENTOS = "C:\\Users\\eandr\\source\\repos\\Cajero\\Movimientos.txt";
 
         public List<Usuario> ListaUsuarios = new List<Usuario>();
+        public List<string[]> ListaMovimientos = new List<string[]>();
         public void Inicio()
         {
             Console.ForegroundColor = ConsoleColor.Magenta;
@@ -134,7 +135,7 @@ namespace Cajero
             |                  1. Depósito o consignación                                      |
             |                  2. Retiro                                                       |
             |                  3. Consulta de saldo                                            | 
-            |                  4. Consulta úlitmos 5 movimientos                               |
+            |                  4. Consulta últimos 5 movimientos                               |
             |                  5. Cambio de clave                                              |
             |                  6. Cerrar sesión                                                |
             |                                                                                  |
@@ -283,34 +284,34 @@ namespace Cajero
 
                         Ingrese el valor a retirar->");
 
-                decimal retiro = decimal.Parse(Console.ReadLine());
-                string monto = retiro.ToString();
+                decimal Retiro = decimal.Parse(Console.ReadLine());
+                string Monto = Retiro.ToString();
 
-                if (retiro >= 10000 && retiro <= 7000000 && retiro <= UsuarioConectado.Saldo)
+                if (Retiro >= 10000 && Retiro <= 7000000 && Retiro <= UsuarioConectado.Saldo)
                 {
                     string TipoMovimiento = "Retiro";
                     decimal SaldoAnterior = UsuarioConectado.Saldo;
-                    UsuarioConectado.Saldo -= retiro;
+                    UsuarioConectado.Saldo -= Retiro;
 
                     Console.Write($@"
             ____________________________________________________________________________________
             |                                                                                  |
             |                                Retiro   Existoso                                 |
             |                                                                                  |
-            |                       Valor retiro: {retiro.ToString().PadRight(45)}|
+            |                       Valor retiro: {Retiro.ToString().PadRight(45)}|
             |                       Saldo actual: {UsuarioConectado.Saldo.ToString().PadRight(45)}|
             |                                                                                  |
             |             *Presione cualquier tecla para volver al menú principal              |
             |__________________________________________________________________________________|   ");
 
-                    AgregarMovimiento(TipoMovimiento, monto, SaldoAnterior);
+                    AgregarMovimiento(TipoMovimiento, Monto, SaldoAnterior);
                     ActualizarUsuarios();
                     Console.ReadKey(true);
                     Console.Clear();
                 }
                 else
                 {
-                    if (retiro > UsuarioConectado.Saldo)
+                    if (Retiro > UsuarioConectado.Saldo)
                     {
                         Console.Write(@"
             ____________________________________________________________________________________
@@ -471,16 +472,94 @@ namespace Cajero
 
         public void MovimientosALista()
         {
+            using (StreamReader sr = new StreamReader(RUTA_MOVIMIENTOS))
+            {
+                try
+                {
+                    string linea;
+                    while ((linea = sr.ReadLine()) != null)
+                    {
+
+                        if (linea.StartsWith("Identificación"))
+                        {
+                            continue;
+                        }
+                        //sw.WriteLine("FechaHora".PadRight(30) + "IdUsuario".PadRight(25) + "Tipo de movimiento".PadRight(28) + "Monto".PadRight(20) + "Saldo Anterior".PadRight(28) + "Saldo Nuevo".PadRight(30));
+
+                        string FechaHora = linea.Substring(0, 30).Trim();
+                        string IdUsuario = linea.Substring(30, 25).Trim();
+                        string TipoMovimiento = linea.Substring(55, 28).Trim();
+                        string Monto = linea.Substring(83, 20).Trim();
+                        string SaldoAnterior = linea.Substring(103, 28).Trim();
+                        string SaldoNuevo = linea.Substring(131, 30).Trim();
+
+
+                        string[] Movimiento = new string[6];
+
+                        Movimiento[0] = FechaHora;
+                        Movimiento[1] = IdUsuario;
+                        Movimiento[2] = TipoMovimiento;
+                        Movimiento[3] = Monto;
+                        Movimiento[4] = SaldoAnterior;
+                        Movimiento[5]= SaldoNuevo;
+                        
+                        ListaMovimientos.Add(Movimiento);
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.Clear();
+                    Console.WriteLine("No se pudo ejecutar la solicitud, ocurrió un error: " + ex);
+
+                }
+
+
+            }
 
 
         }
         public void VerMovimientos()
         {
+            try 
+            {
+                MovimientosALista();
+                var resultado = (from variable in ListaMovimientos
+                                 where (variable[1] == UsuarioConectado.Identificacion)
+                                 orderby DateTime.Parse(variable[0]) descending
+                                 select variable).Take(5);
+                Console.Clear();
+                Console.WriteLine("_________________________________________________________________________________");
+                Console.WriteLine();
+                Console.WriteLine("A continuación puede observar la información de los últimos movimientos realizados en su cuenta");
+                Console.WriteLine();
+
+                foreach (var movimiento in resultado)
+                {
+
+                    Console.WriteLine($"Fecha y hora: {movimiento[0]} || Tipo de movimiento: {movimiento[2]} || Monto: {movimiento[3]} || Saldo anterior:{movimiento[4]} || Saldo nuevo: {movimiento[5]}");
+                    Console.WriteLine();
+                }
+
+                Console.WriteLine();
+                Console.WriteLine("*Presione cualquier tecla para volver al menú");
+                Console.WriteLine();
+                Console.ReadKey(true);
+                Console.WriteLine("_________________________________________________________________________________");
+                Console.Clear();
+
+            }
+            catch (Exception ex)
+                {
+                Console.Clear();
+                Console.WriteLine("No se pudo ejecutar la solicitud, ocurrió un error: " + ex);
+
+            }
 
         }
         public void CambiarClave()
         {
-
+            
         }
 
 
