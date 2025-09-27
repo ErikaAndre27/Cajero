@@ -18,32 +18,58 @@ namespace Cajero
 
         public List<Usuario> ListaUsuarios = new List<Usuario>();
         public List<string[]> ListaMovimientos = new List<string[]>();
+
+        //Este método muestra el mensaje inicial al usuario, si es ture muestra el menú, si no no permite el acceso.
         public void Inicio()
         {
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.Clear();
             //Imprime mensaje inicial y solicita credenciales de ingreso
-            Console.WriteLine("Bienvenido al cajero");
-            Console.Write("Ingrese su número de cuenta: ");
+
+            Console.Write(@"
+            ____________________________________________________________________________________
+            |                                                                                  |
+            |                               Bienvenid@ al cajero                               |
+            |__________________________________________________________________________________|                                                                                           
+
+                        Ingrese su número de cuenta ->");
+            
             string IdUsuario = Console.ReadLine();
             Console.WriteLine();
-            Console.Write("Ingrese su clave: ");
+            Console.Write(@"
+
+                        Ingrese su clave ->");
             string Clave = Console.ReadLine();
+            Console.Clear();
 
             //Acepta acceso si ha ingresado las credenciales correctas
             if (EsValido(IdUsuario, Clave)==true)
             {
-                Console.WriteLine($"Credenciales correctas, bienvenido {UsuarioConectado.NombreCompleto}");
-                System.Threading.Thread.Sleep(2000);
+               
+                Console.Write(@$"
+            ____________________________________________________________________________________
+            |                                                                                  |
+            |                           Credenciales correctas                                 |
+            |                                                                                  |
+            |                   Bienvenid@ {UsuarioConectado.NombreCompleto.PadRight(52)}|
+            |                                                                                  |
+            |__________________________________________________________________________________|");
+                System.Threading.Thread.Sleep(3000);
                 Console.Clear();
                 HacerMenu();
             }
 
             else {
-                Console.WriteLine("Acceso denegado.");
+                Console.Write(@$"
+            ____________________________________________________________________________________
+            |                                                                                  |
+            |                                Acceso denegado                                   |
+            |                                                                                  |
+            |__________________________________________________________________________________|");
             }
         }
 
+        //Este método valida los datos ingresados (número de cuenta y clave) y devuelve un booleano para el método de inicio.
         public bool EsValido(string IdUsuario, string ClaveUsuario)
         {
             using (StreamReader sr = new StreamReader(RUTA_ARCHIVO))
@@ -75,7 +101,13 @@ namespace Cajero
                                 if (ClaveIngresada == System.Text.Encoding.UTF8.GetString(System.Convert.FromBase64String(Clave)))
                                 {
                                     //Instancia Usuario con valores del usuario conectado
-                                    Console.WriteLine("Usuario válido");
+                                    Console.Write(@$"
+            ____________________________________________________________________________________
+            |                                                                                  |
+            |                              Usuario válido                                      |
+            |                                                                                  |
+            |__________________________________________________________________________________|");
+                                    
                                     UsuarioConectado = new Usuario();
                                     UsuarioConectado.Identificacion = Id;
                                     UsuarioConectado.NombreCompleto = Nombre ;
@@ -89,13 +121,20 @@ namespace Cajero
                                     // Controla el número de intentos realizados
                                     Intentos--;
                                     if (Intentos == 0)
-                                    { 
-                                        Console.WriteLine("Ha superado el número de intentos");
+                                    {
+                                        Console.Write(@$"
+            ____________________________________________________________________________________
+            |                                                                                  |
+            |                           Ha superado el número de intentos                      |
+            |                                                                                  |
+            |__________________________________________________________________________________|");
+                                      
                                         return false;
                                     }
 
                                    
-                                    Console.Write($"Clave errónea. Le quedan {Intentos} intentos. Ingrese su clave nuevamente: ");
+                                    Console.Write(@$"
+                        Clave errónea. Le quedan {Intentos} intentos. Ingrese su clave nuevamente:");
                                     ClaveIngresada = Console.ReadLine();
                             
                                 }
@@ -107,12 +146,17 @@ namespace Cajero
                     Linea = sr.ReadLine();
 
                 }
-                Console.WriteLine("El usuario no existe.");
+                Console.Write(@$"
+            ____________________________________________________________________________________
+            |                                                                                  |
+            |                              El usuario no existe.                               |
+            |                                                                                  |
+            |__________________________________________________________________________________|");
+               
                 return false;
             }
             
         }
-
 
         //Método para mostrar el menú una vez el Usuario se haya autenticado exitosamente
         public void HacerMenu()
@@ -175,7 +219,13 @@ namespace Cajero
                         case '6':
 
                             existe = true;
-                            Console.WriteLine("Gracias por usar nuestros servicios, presione cualquier tecla para terminar");
+                            Console.Write(@$"
+            ____________________________________________________________________________________
+            |                                                                                  |
+            |                    Gracias por usar nuestros servicios                           |
+            |                                                                                  |
+            |    *presione cualquier tecla para terminar                                       |
+            |__________________________________________________________________________________|");
                             Console.ReadKey();
                             break;
 
@@ -196,6 +246,7 @@ namespace Cajero
             }               
         }
 
+        //Este método permite que el usuario aumente en saldo en la cuenta, hasta un máximo de 2'000.000
          public void Deposito()
         {
             Console.Clear();
@@ -431,6 +482,7 @@ namespace Cajero
           
         }
 
+        //Este método devuelve el saldo actual del usuario 
         public void ConsultaSaldo()
         {
             Console.Clear();
@@ -459,6 +511,7 @@ namespace Cajero
             }
         }
 
+        //Este método agrega una línea al archivo de movimientos cada vez que se hace una transacción de retiro o depósito
         public void AgregarMovimiento(string TipoMovimiento, string monto, decimal SaldoAnterior)
         {
             using (StreamWriter sw = File.AppendText(RUTA_MOVIMIENTOS))
@@ -470,6 +523,7 @@ namespace Cajero
             }
         }
 
+        //Este método se enplea para convertir el archivo de movimientos en una lista de arreglos
         public void MovimientosALista()
         {
             using (StreamReader sr = new StreamReader(RUTA_MOVIMIENTOS))
@@ -519,6 +573,8 @@ namespace Cajero
 
 
         }
+
+        //Este método devuelve al usuario una lista de los últimos 5 movimientos realizados en su cuenta
         public void VerMovimientos()
         {
             try 
@@ -559,7 +615,87 @@ namespace Cajero
         }
         public void CambiarClave()
         {
-            
+            try
+            {
+                Console.Clear();
+                Console.Write(@"
+            ____________________________________________________________________________________
+            |                                                                                  |
+            |                                Cambio de Clave                                   |
+            |                                                                                  |
+            |                    Recuerde que la clave debe tener 4 digitos                    |
+            |                                                                                  |
+            |__________________________________________________________________________________|                                                                                           
+
+                        Ingrese la nueva clave ->");
+
+                string ClaveNueva = Console.ReadLine();
+
+                if (ClaveNueva.Length == 4 && ClaveNueva.All(char.IsDigit))
+                {
+                    Console.Write(@"
+                        
+                        Ingrese nuevamente la nueva clave ->");
+                    string ClaveNueva2 = Console.ReadLine();
+
+                    if (ClaveNueva == ClaveNueva2)
+                    {
+                        byte[] bytes = Encoding.UTF8.GetBytes(ClaveNueva);
+                        string base64 = Convert.ToBase64String(bytes);
+                        UsuarioConectado.Clave = base64;
+                        ActualizarUsuarios();
+                        Console.Clear();
+                        Console.Write(@"
+            ____________________________________________________________________________________
+            |                                                                                  |
+            |                       El cambio de Clave ha sido exitoso                         |
+            |                                                                                  |
+            |             *Presione cualquier tecla para volver al menú principal              |
+            |__________________________________________________________________________________|");
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.Write(@"
+            ____________________________________________________________________________________
+            |                                                                                  |
+            |                                      ERROR                                       |
+            |                                                                                  |
+            |           La clave ingresada no coincide o no cumple las condiciones.            |
+            |                                                                                  |
+            |             *Presione cualquier tecla para volver al menú principal              |
+            |__________________________________________________________________________________|");
+
+                    }
+                    Console.ReadKey(true);
+                    Console.Clear();
+                    
+                }
+                else
+                {
+                    Console.Write(@"
+            ____________________________________________________________________________________
+            |                                                                                  |
+            |                                      ERROR                                       |
+            |                                                                                  |
+            |           La clave ingresada no coincide o no cumple las condiciones.            |
+            |                                                                                  |
+            |             *Presione cualquier tecla para volver al menú principal              |                                                                                  
+            |__________________________________________________________________________________|");
+                    Console.ReadKey(true);
+                    Console.Clear();
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.Clear();
+                Console.WriteLine("No se pudo ejecutar la solicitud, ocurrió un error: " + ex);
+
+            }
+
         }
 
 
