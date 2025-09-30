@@ -1,4 +1,4 @@
 Identificación      Nombre Completo                         Clave     Saldo                         
 1010067583          Erika Andrea Gonzalez Ramos             MTIzNA==  3980000,0                     
 1018510110          Lesdy Daniela Gonzalez Ramos            MTIzNA==  1980000,0                     
-1233492717          Marlon Aswin Baldermar Niño Turriago    MTIzNA==  200000,0                      
+1233492717          Marlon Aswin Baldermar Niño Turriago    MTIyNA==  1433000,0                     

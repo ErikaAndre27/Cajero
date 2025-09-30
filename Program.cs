@@ -3,8 +3,8 @@ using System.ComponentModel;
 using System.Linq;
 
 //Ruta del archivo en el que se guarda la información de las cuentas registradas
-string RutaArchivo = "C:\\Users\\eandr\\source\\repos\\Cajero\\Usuarios.txt";
-string RutaMovimientos = "C:\\Users\\eandr\\source\\repos\\Cajero\\Movimientos.txt";
+string RutaArchivo = "./Usuarios.txt";
+string RutaMovimientos = "./Movimientos.txt";
 
 CajeroAutomatico Cajero1 = new CajeroAutomatico();
 

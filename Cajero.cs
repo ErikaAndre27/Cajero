@@ -13,8 +13,8 @@ namespace Cajero
     public class CajeroAutomatico
     {
         public Usuario? UsuarioConectado;
-        private const String RUTA_ARCHIVO = "C:\\Users\\eandr\\source\\repos\\Cajero\\Usuarios.txt";
-        private const string RUTA_MOVIMIENTOS = "C:\\Users\\eandr\\source\\repos\\Cajero\\Movimientos.txt";
+        private const String RUTA_ARCHIVO = "./Usuarios.txt";
+        private const string RUTA_MOVIMIENTOS = "./Movimientos.txt";
 
         public List<Usuario> ListaUsuarios = new List<Usuario>();
         public List<string[]> ListaMovimientos = new List<string[]>();
